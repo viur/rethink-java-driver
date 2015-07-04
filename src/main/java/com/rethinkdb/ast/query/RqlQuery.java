@@ -101,7 +101,7 @@ public class RqlQuery {
         return connection.runForCursor(toTerm());
     }
 
-    public <K,V> Map<K,V> runForGroup(RethinkDBConnection connection) {
+    public <K, V> Map<K, V> runForGroup(RethinkDBConnection connection) {
         return GroupedResponseConverter.convert((Map<String, Object>) run(connection));
     }
 
@@ -118,27 +118,27 @@ public class RqlQuery {
     }
 
     public RqlQuery eq(Object... queries) {
-        return new Eq(this,Arrays.asList(queries), null);
+        return new Eq(this, Arrays.asList(queries), null);
     }
 
     public RqlQuery ne(Object... queries) {
-        return new Ne(this,Arrays.asList(queries), null);
+        return new Ne(this, Arrays.asList(queries), null);
     }
 
     public RqlQuery lt(Object... queries) {
-        return new Lt(this,Arrays.asList(queries), null);
+        return new Lt(this, Arrays.asList(queries), null);
     }
 
     public RqlQuery le(Object... queries) {
-        return new Le(this,Arrays.asList(queries), null);
+        return new Le(this, Arrays.asList(queries), null);
     }
 
     public RqlQuery gt(Object... queries) {
-        return new Gt(this,Arrays.asList(queries), null);
+        return new Gt(this, Arrays.asList(queries), null);
     }
 
     public RqlQuery ge(Object... queries) {
-        return new Ge(this,Arrays.asList(queries), null);
+        return new Ge(this, Arrays.asList(queries), null);
     }
 
     public RqlQuery add(Object... queries) {
@@ -150,27 +150,27 @@ public class RqlQuery {
     }
 
     public RqlQuery mul(Object... queries) {
-        return new Mul(this,Arrays.asList(queries), null);
+        return new Mul(this, Arrays.asList(queries), null);
     }
 
     public RqlQuery div(Object... queries) {
-        return new Div(this,Arrays.asList(queries), null);
+        return new Div(this, Arrays.asList(queries), null);
     }
 
     public RqlQuery mod(Object... queries) {
-        return new Mod(this,Arrays.asList(queries), null);
+        return new Mod(this, Arrays.asList(queries), null);
     }
 
     public RqlQuery and(Object... queries) {
-        return new All(this,Arrays.asList(queries), null);
+        return new All(this, Arrays.asList(queries), null);
     }
 
     public RqlQuery or(Object... queries) {
-        return new Any(this,Arrays.asList(queries), null);
+        return new Any(this, Arrays.asList(queries), null);
     }
 
     public RqlQuery not(Object... queries) {
-        return new Not(this,Arrays.asList(queries), null);
+        return new Not(this, Arrays.asList(queries), null);
     }
 
     public DB db(String db) {
@@ -237,11 +237,11 @@ public class RqlQuery {
     }
 
     public OrderBy orderByIndex(Object index) {
-      return new OrderBy(this, new Arguments(), new OptionalArguments().with("index", index));
+        return new OrderBy(this, new Arguments(), new OptionalArguments().with("index", index));
     }
 
     public OrderBy orderByField(String field) {
-        return orderBy((String)null, field);
+        return orderBy((String) null, field);
     }
 
     private OrderBy orderBy(String index, Object... fields) {
@@ -249,8 +249,7 @@ public class RqlQuery {
         for (Object field : fields) {
             if (field instanceof Asc || field instanceof Desc) {
                 args.add(field);
-            }
-            else {
+            } else {
                 args.add(RqlUtil.funcWrap(field));
             }
         }
@@ -269,19 +268,23 @@ public class RqlQuery {
         return new GetAll(this, new Arguments(keys), new OptionalArguments().with("index", index));
     }
 
-    public Filter filter(RqlFunction function) { return new Filter(this, new Arguments(new Func(function)), null); }
+    public Filter filter(RqlFunction function) {
+        return new Filter(this, new Arguments(new Func(function)), null);
+    }
 
-    public Filter filter(RqlQuery query) { return new Filter(this, new Arguments(query), null); }
+    public Filter filter(RqlQuery query) {
+        return new Filter(this, new Arguments(query), null);
+    }
 
     public Between between(String lowerKey, String upperKey) {
-      return new Between(this, new Arguments(lowerKey, upperKey), null);
+        return new Between(this, new Arguments(lowerKey, upperKey), null);
     }
 
     public Between between(String lowerKey, String upperKey, String index, Bound leftBound, Bound rightBound) {
-      return new Between(this, new Arguments(lowerKey, upperKey),
-          new OptionalArguments().with("index", index)
-                       .with("left_bound", leftBound.name())
-                       .with("right_bound", rightBound.name()));
+        return new Between(this, new Arguments(lowerKey, upperKey),
+                new OptionalArguments().with("index", index)
+                        .with("left_bound", leftBound.name())
+                        .with("right_bound", rightBound.name()));
     }
 
     public Table table(String tableName) {
@@ -324,7 +327,7 @@ public class RqlQuery {
         return new Pluck(this, new Arguments(fields), null);
     }
 
-    public Branch branch(RqlQuery predicate, Map<String,Object> trueBranch, Map<String,Object> falseBranch) {
+    public Branch branch(RqlQuery predicate, Map<String, Object> trueBranch, Map<String, Object> falseBranch) {
         return new Branch(predicate, new Arguments(trueBranch, falseBranch), null);
     }
 
@@ -381,7 +384,7 @@ public class RqlQuery {
     }
 
     public EqJoin eqJoin(String leftAttribute, Table otherTable, String indexId) {
-        return new EqJoin(this, new Arguments(leftAttribute, otherTable), new OptionalArguments().with("index",indexId));
+        return new EqJoin(this, new Arguments(leftAttribute, otherTable), new OptionalArguments().with("index", indexId));
     }
 
     public EqJoin eqJoin(RqlFunction leftAttribute, Table otherTable) {
@@ -389,7 +392,7 @@ public class RqlQuery {
     }
 
     public EqJoin eqJoin(RqlFunction leftAttribute, Table otherTable, String indexId) {
-        return new EqJoin(this, new Arguments(RqlUtil.funcWrap(leftAttribute), otherTable), new OptionalArguments().with("index",indexId));
+        return new EqJoin(this, new Arguments(RqlUtil.funcWrap(leftAttribute), otherTable), new OptionalArguments().with("index", indexId));
     }
 
     public Zip zip() {
@@ -452,14 +455,17 @@ public class RqlQuery {
     public Group group(RqlFunction func) {
         return group(func, null);
     }
+
     public Group group(RqlFunction func, String index) {
-        return new Group(this, new Arguments(RqlUtil.funcWrap(func)), new OptionalArguments().with("index",index));
+        return new Group(this, new Arguments(RqlUtil.funcWrap(func)), new OptionalArguments().with("index", index));
     }
+
     public Group group(String field) {
         return group(field, null);
     }
+
     public Group group(String field, List index) {
-        return new Group(this, new Arguments(field), new OptionalArguments().with("index",index));
+        return new Group(this, new Arguments(field), new OptionalArguments().with("index", index));
     }
 
     public Ungroup ungroup() {
@@ -542,24 +548,28 @@ public class RqlQuery {
         return new Keys(this, null, null);
     }
 
-    public Now now() { return new Now(this, null, null); }
+    public Now now() {
+        return new Now(this, null, null);
+    }
 
-    public Date date() { return new Date(this, null, null); }
+    public Date date() {
+        return new Date(this, null, null);
+    }
 
     public Time time(int year, int month, int day) {
-        return time(year,month,day,"Z");
+        return time(year, month, day, "Z");
     }
 
     public Time time(int year, int month, int day, String timezone) {
-        return new Time(this, new Arguments(year,month,day, timezone), null);
+        return new Time(this, new Arguments(year, month, day, timezone), null);
     }
 
     public Time time(int year, int month, int day, int hour, int minute, int second) {
-        return time(year,month,day,hour,minute,second);
+        return time(year, month, day, hour, minute, second);
     }
 
     public Time time(int year, int month, int day, int hour, int minute, int second, String timezone) {
-        return new Time(this, new Arguments(year,month,day,hour,minute,second, timezone), null);
+        return new Time(this, new Arguments(year, month, day, hour, minute, second, timezone), null);
     }
 
     public EpochTime epochTime(long time) {
@@ -627,6 +637,15 @@ public class RqlQuery {
 
     public ToEpochTime toEpochTime() {
         return new ToEpochTime(this, null, null);
+    }
+
+
+    public Http http(String url) {
+        return new Http(this, new Arguments(url), null);
+    }
+
+    public Http http(String url, OptionalArguments optionalArgs) {
+        return new Http(this, new Arguments(url), optionalArgs);
     }
 
 }
